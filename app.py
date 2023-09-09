@@ -27,7 +27,7 @@ class App(tk.Tk):
         
         # App settings
         self.title("AOE3 Random Card Selector")
-        self.geometry("512x512")
+        self.geometry("512x768")
         self.resizable(True, True)
         self.debug_mode = debug_mode
         if self.debug_mode:
@@ -47,6 +47,12 @@ class App(tk.Tk):
         max_age_options = [None, "Age 1", "Age 2", "Age 3", "Age 4"]
         self.max_age_dropdown = tk.OptionMenu(self, self.max_age_var, *max_age_options)
         self.max_age_dropdown.pack()
+
+        # Create a Scale widget for adjusting the moveTo duration
+        self.duration_slider = tk.Scale(self, from_=0.1, to=2.0, resolution=0.01, orient=tk.HORIZONTAL, label='Speed (s)',
+                                            command=self.get_move_duration)
+        self.duration_slider.set(0.5)
+        self.duration_slider.pack()
 
         self.res_x = None
         self.res_y = None
@@ -85,6 +91,10 @@ class App(tk.Tk):
         selected_age = self.max_age_var.get()
         self.after(1000, self.get_max_age)
         return self.config["age_options"][selected_age]
+
+    def get_move_duration(self, value) -> float:
+        """Return move duration."""
+        self.get_move_duration = float(value)
 
     def _setup_ui(self) -> None:
         """Creates UI list."""
@@ -156,11 +166,11 @@ class App(tk.Tk):
                 if cards_selected[idx-1][0] != cards_selected[idx][0]:
                     # Get Age
                     print(f"Selected Age {age_num}")
-                    pyautogui.moveTo(posconf[age_num][0], posconf[age_num][1], duration=1)
+                    pyautogui.moveTo(posconf[age_num][0], posconf[age_num][1], duration=self.get_move_duration)
                     pyautogui.click()
                 # Get Row
                 print(f"Selected card {row_num}")
-                pyautogui.moveTo(row_pos[0], row_pos[1], duration=1)
+                pyautogui.moveTo(row_pos[0], row_pos[1], duration=self.get_move_duration)
                 pyautogui.click()
             finished = True
 
