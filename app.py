@@ -34,6 +34,9 @@ class App(tk.Tk):
             track_mouse_coordinates()
 
         self.Lb = None
+        self.cards_display=tk.Text(self, width=80, height=15)
+        self.cards_display.pack()
+
         self.res_x = None
         self.res_y = None
 
@@ -86,6 +89,14 @@ class App(tk.Tk):
         else:
             self.start_button["state"] = tk.DISABLED
 
+    def print_cards_to_ui(self, cards: list):
+        """Prints selected random cards."""
+        # Clear the current content if there is any
+        if self.cards_display.get("1.0", tk.END):
+            self.cards_display.delete("1.0", tk.END)
+        for key, value in cards:
+            self.cards_display.insert(tk.END,  f"Age: {key} Card: {value}\n")
+
     def click_cards(self):
         """Gets card dict and clicks on them."""
 
@@ -96,6 +107,8 @@ class App(tk.Tk):
         automation_running = True
 
         cards_selected = get_rand_cards(self.max_civ_cards[self.get_clicked_civ()], self.civs_config[self.get_clicked_civ()])
+        self.print_cards_to_ui(cards_selected)
+
         posconf = self.config
         while automation_running and not finished:
             for idx, card in enumerate(cards_selected):
@@ -104,13 +117,13 @@ class App(tk.Tk):
                 row_num = card[1]
 
                 if row_num <= 15:
-                    x = posconf["row1_start"][0] + (abs(row_num-15) * posconf["col_card_distance"])
+                    x = posconf["row1_start"][0] + posconf["col_card_distance"] * (row_num - 1)
                     conf_row = f"row1_start"
-                elif row_num > 15 <= 30:
-                    x = posconf["row2_start"][0] + (abs(row_num-30) * posconf["col_card_distance"])
+                elif row_num > 15 and row_num <= 30:
+                    x = posconf["row2_start"][0] + posconf["col_card_distance"] * (row_num - 16)
                     conf_row = f"row2_start"
-                elif row_num > 30 <= 45:
-                    x = posconf["row3_start"][0] + (abs(row_num-45) * posconf["col_card_distance"])
+                elif row_num > 30 and row_num <= 45:
+                    x = posconf["row3_start"][0] + posconf["col_card_distance"] * (row_num - 31)
                     conf_row = f"row3_start"
                 else:
                     raise ValueError("Wrong card cooridnates found!")

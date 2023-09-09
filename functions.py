@@ -18,4 +18,4 @@ def get_rand_cards(limit, civ):
                 print(f"Age {age_choice}, Card {card_choice}")
                 break
     print("Cards: " + str(len(db)))
-    return sorted(db, key=lambda x:x[0])
+    return sorted(db, key=lambda x:(x[0], x[1]))
