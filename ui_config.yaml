@@ -11,3 +11,11 @@ age3: !!python/tuple [50, 894]
 age4: !!python/tuple [50, 934]
 
 col_card_distance: 86
+
+age_options : {
+    "Age 1": 1,
+    "Age 2": 2,
+    "Age 3": 3,
+    "Age 4": 4,
+    "None": 5
+}

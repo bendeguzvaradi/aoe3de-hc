@@ -37,11 +37,23 @@ class App(tk.Tk):
         self.cards_display=tk.Text(self, width=80, height=15)
         self.cards_display.pack()
 
+        # Add Age Limit option
+        self.max_age_var = tk.StringVar()
+        self.max_age_var.set("None")
+
+        max_age_label = tk.Label(self, text="Max Age")
+        max_age_label.pack()
+
+        max_age_options = [None, "Age 1", "Age 2", "Age 3", "Age 4"]
+        self.max_age_dropdown = tk.OptionMenu(self, self.max_age_var, *max_age_options)
+        self.max_age_dropdown.pack()
+
         self.res_x = None
         self.res_y = None
 
         self._setup_ui()
         self.get_clicked_civ()
+        self.get_max_age()
 
     def _get_aoe3(self):
         if platform.system() == 'Windows':
@@ -67,6 +79,12 @@ class App(tk.Tk):
         if selected_idx:
             selected_element = self.Lb.get(selected_idx[0])
             return selected_element
+        
+    def get_max_age(self) -> int:
+        """Return max age limit."""
+        selected_age = self.max_age_var.get()
+        self.after(1000, self.get_max_age)
+        return self.config["age_options"][selected_age]
 
     def _setup_ui(self) -> None:
         """Creates UI list."""
@@ -106,7 +124,7 @@ class App(tk.Tk):
                         
         automation_running = True
 
-        cards_selected = get_rand_cards(self.max_civ_cards[self.get_clicked_civ()], self.civs_config[self.get_clicked_civ()])
+        cards_selected = get_rand_cards(self.max_civ_cards[self.get_clicked_civ()], self.civs_config[self.get_clicked_civ()], age_limit=self.get_max_age())
         self.print_cards_to_ui(cards_selected)
 
         posconf = self.config
