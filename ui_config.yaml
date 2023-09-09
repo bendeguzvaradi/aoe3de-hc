@@ -1,0 +1,13 @@
+
+aoe3name: 'Age of Empires III: Definitive Edition'
+
+row1_start: !!python/tuple [610, 572]
+row2_start: !!python/tuple [613, 658]
+row3_start: !!python/tuple [620, 748]
+
+age1: !!python/tuple [50, 814]
+age2: !!python/tuple [50, 854]
+age3: !!python/tuple [50, 894]
+age4: !!python/tuple [50, 934]
+
+col_card_distance: 86
